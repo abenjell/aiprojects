@@ -1,3 +1,8 @@
 spring:
   application:
     name: mcp-client
+  ai:
+    mcp:
+      client:
+        stdio:
+          servers-configuration: "classpath:mcp-servers.json"

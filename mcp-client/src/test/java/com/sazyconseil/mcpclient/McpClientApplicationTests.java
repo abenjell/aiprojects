@@ -3,8 +3,8 @@ package com.sazyconseil.mcpclient;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class AiprojectsApplicationTests {
+@SpringBootTest(properties = "spring.ai.mcp.client.enabled=false")
+class McpClientApplicationTests {
 
     @Test
     void contextLoads() {
