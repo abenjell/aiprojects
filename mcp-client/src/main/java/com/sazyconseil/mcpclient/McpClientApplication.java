@@ -1,13 +1,13 @@
-package com.sazyconseil.aiprojects;
+package com.sazyconseil.mcpclient;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class AiprojectsApplication {
+public class McpClientApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(AiprojectsApplication.class, args);
+        SpringApplication.run(McpClientApplication.class, args);
     }
 
 }

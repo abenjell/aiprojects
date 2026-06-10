@@ -1,4 +1,4 @@
-package com.sazyconseil.aiprojects;
+package com.sazyconseil.mcpclient;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
