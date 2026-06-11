@@ -4,3 +4,17 @@ spring:
   main:
     banner-mode: off
     log-startup-info: false
+  ai:
+    mcp:
+      server:
+        name: my-weather-server
+        version: 0.0.1
+        type: sync
+        stdio: false
+        resource-change-notification: true
+        tool-change-notification: true
+        prompt-change-notification: true
+
+logging:
+  file:
+    name: /target/starter-webflux-server.log
