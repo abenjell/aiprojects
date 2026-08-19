@@ -39,6 +39,10 @@ public class WeatherService {
         // - Severity
         // - Description
         // - Safety instructions
-        return "no alerts";
+        return this.restClient.get()
+                .uri("https://api.weather.gov/alerts/active?area=" + state.toUpperCase())
+                .header("User-Agent", "mcp-server-weather-app (contact@sazyconseil.com)")
+                .retrieve()
+                .body(String.class);
     }
 }

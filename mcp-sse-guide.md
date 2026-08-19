@@ -37,7 +37,7 @@ curl -N -s http://172.30.160.1:8080/sse | jq -r --unbuffered -R '
   | sub("^data:\\s*"; "")
   | if test("sessionId=") then
       (capture("sessionId=(?<id>[^&\\s]+)") | "\n=== SESSION STARTED: \(.id) ===\n")
-    else
+    elseTu p
       (fromjson? // .)
     end
 '

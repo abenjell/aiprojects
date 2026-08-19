@@ -32,6 +32,8 @@ class WeatherServiceTest {
 
         when(restClient.get()).thenReturn(requestHeadersUriSpec);
         when(requestHeadersUriSpec.uri(any(Function.class))).thenReturn(requestHeadersSpec);
+        when(requestHeadersUriSpec.uri(anyString())).thenReturn(requestHeadersSpec);
+        when(requestHeadersSpec.header(anyString(), anyString())).thenReturn(requestHeadersSpec);
         when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
 
         weatherService = new WeatherService(builder);
@@ -43,6 +45,17 @@ class WeatherServiceTest {
         when(responseSpec.body(String.class)).thenReturn(mockResponse);
 
         String result = weatherService.getWeather(48.8566, 2.3522);
+
+        assertThat(result).isEqualTo(mockResponse);
+        verify(restClient).get();
+    }
+
+    @Test
+    void shouldGetAlerts() {
+        String mockResponse = "{\"features\":[]}";
+        when(responseSpec.body(String.class)).thenReturn(mockResponse);
+
+        String result = weatherService.getAlerts("CA");
 
         assertThat(result).isEqualTo(mockResponse);
         verify(restClient).get();

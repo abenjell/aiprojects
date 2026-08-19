@@ -97,6 +97,22 @@ Ce document présente un plan d'apprentissage structuré et intensif sur 10 jour
 
 ---
 
+## 💡 Cas d'Utilisation Classiques pour les Skills
+Pour approfondir vos connaissances ou concevoir de nouveaux compétences (Skills) à forte valeur ajoutée en entreprise, voici les grandes familles de cas d'usage classiques :
+
+1. **Garde-fou d'Architecture & Clean Code (Architecture Guard)**
+   * **Exemple (`spring-clean-arch`)** : Imposer l'injection par constructeur plutôt que par champ (`@Autowired` sur attribut) et forcer l'usage systématique de DTO/mappers pour ne jamais exposer directement les entités JPA dans les contrôleurs REST.
+2. **Design System & Intégration UI (UI Standards)**
+   * **Exemple (`brand-tailwind-guard`)** : Interdire le CSS arbitraire (ex: `h-[42px]`) pour forcer l'usage des classes de taille et de couleurs standardisées du Design System d'entreprise, tout en imposant des structures réactives (Mobile-first).
+3. **Gestion des API & Contrats de Données (API Contract)**
+   * **Exemple (`openapi-spec-enforcer`)** : Valider que chaque contrôleur REST génère proprement la documentation OpenAPI/Swagger correspondante et imposer un format d'erreur unifié (RFC 7807) pour toutes les réponses d'erreur.
+4. **Normes de Commit & CI/CD (Git Workflow)**
+   * **Exemple (`conventional-commits-writer`)** : Forcer la rédaction de messages de commit respectant strictement les normes *Conventional Commits* et générer des descriptions de Pull Request structurées sous forme de template Markdown.
+5. **Sécurité & Correctifs de Vulnérabilités (Security Patching)**
+   * **Exemple (`cve-pom-patcher`)** : Détecter et corriger automatiquement les failles de sécurité critiques au sein des dépendances d'un projet Maven ou Node en injectant les montées de versions minimales recommandées.
+
+---
+
 ## 📚 Ressources incontournables
 * **Protocoles & SDK :** [Introduction to MCP (Anthropic)](https://modelcontextprotocol.io/introduction) et les dépôts GitHub associés (`@modelcontextprotocol/sdk`).
 * **Exemples Pratiques :** Les serveurs officiels et communautaires [mcp-servers sur GitHub](https://github.com/modelcontextprotocol/servers).
