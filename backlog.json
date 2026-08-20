@@ -1,0 +1,33 @@
+[ {
+  "id" : "TASK-1",
+  "title" : "Passer commande et payer par carte bancaire",
+  "description" : "**En tant que** client acheteur\n**Je veux** saisir mes coordonnées de carte bancaire de manière sécurisée pour valider mon achat\n**Afin de** finaliser ma commande et acquérir les produits.",
+  "priority" : "CRITICAL",
+  "status" : "TODO",
+  "storyPoints" : 8,
+  "acceptanceCriteria" : [ "Given que je suis sur le formulaire de paiement, When je saisis des coordonnées bancaires valides et clique sur \"Payer\", Then ma transaction est validée et je suis redirigé vers une page de succès.", "Given que je tente de payer, When la carte est refusée ou que la saisie est incorrecte, Then un message d'erreur explicite s'affiche et mon panier reste inchangé." ]
+}, {
+  "id" : "TASK-2",
+  "title" : "Ajouter un article au panier d'achat",
+  "description" : "**En tant que** visiteur du site\n**Je veux** pouvoir cliquer sur un bouton \"Ajouter au panier\" depuis la fiche produit\n**Afin d'**accumuler des articles que je souhaite acheter lors de ma session.",
+  "priority" : "HIGH",
+  "status" : "TODO",
+  "storyPoints" : 2,
+  "acceptanceCriteria" : [ "Given que je suis sur la fiche d'un produit avec du stock, When je clique sur \"Ajouter au panier\", Then le compteur d'articles dans mon en-tête de panier augmente de 1.", "Given que je clique sur \"Ajouter au panier\", When le produit est en rupture de stock, Then le bouton est désactivé et un message d'erreur s'affiche." ]
+}, {
+  "id" : "TASK-3",
+  "title" : "Visualiser mon panier d'achat et le montant total",
+  "description" : "**En tant que** client\n**Je veux** consulter la liste des articles de mon panier avec le calcul automatique du total\n**Afin de** vérifier mes choix et connaître le montant exact avant de payer.",
+  "priority" : "HIGH",
+  "status" : "TODO",
+  "storyPoints" : 3,
+  "acceptanceCriteria" : [ "Given que j'ai 2 articles dans mon panier à 10€ et 15€, When je consulte la page panier, Then le total affiché est calculé à 25€.", "Given que je suis sur la page panier, When je supprime un article ou modifie sa quantité, Then la liste se met à jour et le montant total est recalculé instantanément." ]
+}, {
+  "id" : "TASK-4",
+  "title" : "Recevoir un e-mail de confirmation après achat",
+  "description" : "**En tant que** client ayant payé sa commande\n**Je veux** recevoir automatiquement un e-mail de confirmation récapitulatif\n**Afin d'**avoir une preuve écrite de mon achat et le détail de ma transaction.",
+  "priority" : "HIGH",
+  "status" : "TODO",
+  "storyPoints" : 3,
+  "acceptanceCriteria" : [ "Given qu'un paiement a été validé avec succès, When le système finalise la transaction, Then un e-mail contenant le récapitulatif (numéro de commande, articles, montant) est envoyé à l'adresse du client.", "Given que l'envoi d'e-mail échoue techniquement, When la commande est validée, Then l'erreur est journalisée et une tentative de renvoi asynchrone est planifiée sans bloquer l'expérience utilisateur." ]
+} ]
