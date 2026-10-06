@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🛠️ Software Factory Multi-Agents</title>
+    <!-- Polices & Icones -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Parser Markdown & Highlight JS depuis CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/java.min.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: #151d30;
+            --border-color: #232e42;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --primary: #4f46e5;
+            --primary-glow: rgba(79, 70, 229, 0.4);
+            
+            /* Couleurs d'agents */
+            --color-architect: #0ea5e9;
+            --color-refiner: #a855f7;
+            --color-developer: #10b981;
+            --color-qa: #f59e0b;
+            --color-performance: #ef4444;
+            --color-system: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1.5rem;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        header h1 i {
+            -webkit-text-fill-color: #6366f1;
+        }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: #1e293b;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border: 1px solid var(--border-color);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #10b981;
+            box-shadow: 0 0 8px #10b981;
+        }
+
+        .status-dot.disconnected {
+            background-color: #ef4444;
+            box-shadow: 0 0 8px #ef4444;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 2rem;
+            height: calc(100vh - 8rem);
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+        }
+
+        .left-col, .right-col {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            height: 100%;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            height: 100%;
+        }
+
+        textarea {
+            width: 100%;
+            flex-grow: 1;
+            min-height: 120px;
+            background-color: #0b111e;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            padding: 1rem;
+            font-family: inherit;
+            font-size: 0.95rem;
+            resize: none;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-glow);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn:disabled {
+            background: #334155;
+            color: var(--text-secondary);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Console de Logs */
+        .terminal {
+            flex-grow: 1;
+            background-color: #070a13;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            overflow-y: auto;
+            max-height: 350px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .log-entry {
+            display: flex;
+            flex-direction: column;
+            border-left: 2px solid var(--color-system);
+            padding-left: 0.75rem;
+            margin-bottom: 0.5rem;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .log-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .log-time {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+        }
+
+        .badge-agent {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+            color: #fff;
+        }
+
+        .badge-agent.architect { background-color: var(--color-architect); }
+        .badge-agent.backlogrefiner { background-color: var(--color-refiner); }
+        .badge-agent.developer { background-color: var(--color-developer); }
+        .badge-agent.qa { background-color: var(--color-qa); }
+        .badge-agent.performance { background-color: var(--color-performance); }
+        .badge-agent.system { background-color: var(--color-system); }
+
+        .log-type {
+            font-size: 0.7rem;
+            font-weight: 500;
+            background-color: rgba(255,255,255,0.05);
+            padding: 0.05rem 0.3rem;
+            border-radius: 4px;
+            color: var(--text-secondary);
+        }
+
+        .log-content {
+            color: var(--text-primary);
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        /* Panneau de Résultats */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.75rem;
+            margin-bottom: 1rem;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background-color 0.2s, color 0.2s;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .results-container {
+            flex-grow: 1;
+            overflow-y: auto;
+            background-color: #0b111e;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            max-height: calc(100vh - 18rem);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Styles Markdown génériques */
+        .markdown-body {
+            font-size: 0.95rem;
+        }
+
+        .markdown-body h1, .markdown-body h2, .markdown-body h3 {
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.3rem;
+        }
+
+        .markdown-body h1 { font-size: 1.5rem; }
+        .markdown-body h2 { font-size: 1.25rem; }
+        .markdown-body h3 { font-size: 1.1rem; }
+
+        .markdown-body p {
+            margin-bottom: 1rem;
+        }
+
+        .markdown-body pre {
+            background-color: #070a13;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .markdown-body code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+        }
+
+        .markdown-body ul, .markdown-body ol {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+        }
+
+        .markdown-body blockquote {
+            border-left: 4px solid var(--primary);
+            padding-left: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            color: var(--text-secondary);
+            gap: 1rem;
+            padding: 3rem 1rem;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--border-color);
+        }
+
+        /* Scrollbar styles */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #070a13;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #232e42;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1><i class="fa-solid fa-laptop-code"></i> Software Factory Multi-Agents</h1>
+        <div class="status-badge">
+            <div id="statusDot" class="status-dot disconnected"></div>
+            <span id="statusText">SSE Déconnecté</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Colonne Gauche : Inputs et Console -->
+        <div class="left-col">
+            <div class="card" style="flex-grow: 0;">
+                <div class="card-title">
+                    <i class="fa-solid fa-lightbulb" style="color: var(--color-qa);"></i>
+                    <span>Expression de Besoin</span>
+                </div>
+                <div class="input-group">
+                    <textarea id="requirementInput" placeholder="Ex: Je veux un service de gestion d'hôtel. Il doit me permettre d'ajouter une chambre, d'associer un prix, et de changer son statut (Libre / Occupé). Le service doit être entièrement réactif."></textarea>
+                    <button id="submitBtn" class="btn">
+                        <i class="fa-solid fa-play"></i> Lancer la Production
+                    </button>
+                </div>
+            </div>
+
+            <div class="card" style="flex-grow: 1;">
+                <div class="card-title">
+                    <i class="fa-solid fa-terminal" style="color: var(--color-developer);"></i>
+                    <span>Flux d'Événements d'Agents (Observabilité SSE)</span>
+                </div>
+                <div id="terminal" class="terminal">
+                    <div style="color: var(--text-secondary);">Attente de connexion au flux SSE d'agents...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Colonne Droite : Rapports Finaux -->
+        <div class="right-col">
+            <div class="card" style="height: 100%;">
+                <div class="card-title">
+                    <i class="fa-solid fa-chart-line" style="color: var(--color-architect);"></i>
+                    <span>Rapports de Production</span>
+                </div>
+                
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('tab-backlog')">📋 Backlog (Stories)</button>
+                    <button class="tab-btn" onclick="switchTab('tab-architecture')">📐 Architecture</button>
+                    <button class="tab-btn" onclick="switchTab('tab-code')">💻 Code Source</button>
+                    <button class="tab-btn" onclick="switchTab('tab-tests')">🧪 Tests QA</button>
+                    <button class="tab-btn" onclick="switchTab('tab-audit')">⚡ Audit Perf</button>
+                </div>
+
+                <div id="resultsContent" class="results-container">
+                    <div class="empty-state">
+                        <i class="fa-solid fa-microchip"></i>
+                        <p>Aucun rapport généré pour le moment.<br>Saisissez un besoin et lancez la production pour démarrer.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let eventSource = null;
+        const terminal = document.getElementById('terminal');
+        const requirementInput = document.getElementById('requirementInput');
+        const submitBtn = document.getElementById('submitBtn');
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
+        const resultsContainer = document.getElementById('resultsContent');
+
+        // Conteneurs des données brutes
+        let productionReports = {
+            'tab-backlog': '',
+            'tab-architecture': '',
+            'tab-code': '',
+            'tab-tests': '',
+            'tab-audit': ''
+        };
+
+        // Connecter au flux SSE d'événements
+        function connectSSE() {
+            if (eventSource) {
+                eventSource.close();
+            }
+
+            eventSource = new EventSource('/agents/stream');
+
+            eventSource.onopen = () => {
+                statusDot.classList.remove('disconnected');
+                statusText.textContent = 'SSE Connecté';
+                terminal.innerHTML = '<div style="color: #10b981;"><i class="fa-solid fa-wifi"></i> Connexion établie avec le flux d\'observabilité.</div>';
+            };
+
+            eventSource.onerror = (err) => {
+                statusDot.classList.add('disconnected');
+                statusText.textContent = 'SSE Erreur / Déconnecté';
+                console.error("SSE Error:", err);
+            };
+
+            eventSource.addEventListener('agent-event', (e) => {
+                try {
+                    const data = JSON.parse(e.data);
+                    appendLog(data);
+                } catch (err) {
+                    console.error("Failed to parse agent event:", err);
+                }
+            });
+        }
+
+        // Ajouter une entrée dans la console d'observabilité
+        function appendLog(event) {
+            const time = new Date(event.timestamp).toLocaleTimeString();
+            const agentNormalized = event.agentName.toLowerCase().replace(/[^a-z]/g, '');
+            
+            // Icone associée au type de log
+            let typeIcon = 'fa-info-circle';
+            let styleColor = '';
+            if (event.type === 'THOUGHT') typeIcon = 'fa-brain';
+            else if (event.type === 'ACTION') typeIcon = 'fa-gears';
+            else if (event.type === 'OUTPUT') typeIcon = 'fa-file-lines';
+            else if (event.type === 'SYSTEM') typeIcon = 'fa-shield-halved';
+            else if (event.type === 'ERROR') {
+                typeIcon = 'fa-circle-exclamation';
+                styleColor = 'color: var(--color-performance); font-weight: bold;';
+            }
+
+            // Déterminer la couleur de la bordure
+            let borderStyle = `border-left-color: var(--color-system);`;
+            if (agentNormalized === 'architect') borderStyle = `border-left-color: var(--color-architect);`;
+            else if (agentNormalized === 'backlogrefiner') borderStyle = `border-left-color: var(--color-refiner);`;
+            else if (agentNormalized === 'developer') borderStyle = `border-left-color: var(--color-developer);`;
+            else if (agentNormalized === 'qa') borderStyle = `border-left-color: var(--color-qa);`;
+            else if (agentNormalized === 'performance') borderStyle = `border-left-color: var(--color-performance);`;
+
+            const logDiv = document.createElement('div');
+            logDiv.className = 'log-entry';
+            logDiv.style = borderStyle;
+
+            logDiv.innerHTML = `
+                <div class="log-header">
+                    <span class="log-time">[${time}]</span>
+                    <span class="badge-agent ${agentNormalized}">${event.agentName}</span>
+                    <span class="log-type" style="${styleColor}"><i class="fa-solid ${typeIcon}"></i> ${event.type}</span>
+                </div>
+                <div class="log-content">${escapeHTML(event.content)}</div>
+            `;
+
+            terminal.appendChild(logDiv);
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        function escapeHTML(str) {
+            return str
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        // Lancer la production
+        submitBtn.addEventListener('click', async () => {
+            const req = requirementInput.value.trim();
+            if (!req) {
+                alert("Veuillez saisir une expression de besoin.");
+                return;
+            }
+
+            // Reset l'UI
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Production en cours...';
+            
+            // Effacer l'historique précédent sur l'interface
+            const clearDivider = document.createElement('div');
+            clearDivider.style = "border-top: 1px dashed var(--border-color); margin: 1rem 0; color: var(--text-secondary);";
+            clearDivider.textContent = "--- NOUVELLE EXÉCUTION ---";
+            terminal.appendChild(clearDivider);
+
+            resultsContainer.innerHTML = `
+                <div class="empty-state">
+                    <i class="fa-solid fa-spinner fa-spin" style="color: var(--primary); font-size: 3rem;"></i>
+                    <p>La Software Factory s'active !<br>Analyse, décomposition, codage, tests et audits en cours...</p>
+                </div>
+            `;
+
+            try {
+                const response = await fetch('/agents/process', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'text/plain'
+                    },
+                    body: req
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Server returned code ${response.status}`);
+                }
+
+                const markdownReport = await response.text();
+                parseAndStoreReports(markdownReport);
+                displayActiveTab();
+
+            } catch (err) {
+                resultsContainer.innerHTML = `
+                    <div class="empty-state" style="color: var(--color-performance);">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <p>Échec du traitement du besoin :<br>${err.message}</p>
+                    </div>
+                `;
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fa-solid fa-play"></i> Lancer la Production';
+            }
+        });
+
+        // Extrait le code Java de manière robuste, gérant le double-wrapping éventuel
+        function extractJavaCode(rawText) {
+            if (!rawText) return "";
+            const matches = [...rawText.matchAll(/```java([\s\S]*?)```/g)];
+            if (matches.length > 0) {
+                let bestBlock = "";
+                for (const m of matches) {
+                    let candidate = m[1].trim();
+                    if (candidate.includes("```java")) {
+                        candidate = extractJavaCode(candidate);
+                    }
+                    if (candidate.length > bestBlock.length) {
+                        bestBlock = candidate;
+                    }
+                }
+                if (bestBlock) return bestBlock;
+            }
+            // Nettoyage de secours
+            return rawText
+                .replace(/##.*?\n/i, "") // Enlever le titre de section
+                .replace(/```java/g, "")
+                .replace(/```/g, "")
+                .trim();
+        }
+
+        // Parse le rapport Markdown complet et le distribue dans les onglets
+        function parseAndStoreReports(markdown) {
+            // Extraction des sections basée sur les titres ##
+            const sections = {
+                'tab-backlog': '',
+                'tab-architecture': '',
+                'tab-code': '',
+                'tab-tests': '',
+                'tab-audit': ''
+            };
+
+            const backlogMatch = markdown.match(/## 📋 0\. Rapport du Backlog Raffiné[\s\S]*?(?=## 📐 1\. Spécification d'Architecture|$)/i);
+            const archMatch = markdown.match(/## 📐 1\. Spécification d'Architecture[\s\S]*?(?=## 💻 2\. Code de Production Généré|$)/i);
+            const codeMatch = markdown.match(/## 💻 2\. Code de Production Généré[\s\S]*?(?=## 🧪 3\. Suite de Tests Unitaires|$)/i);
+            const testsMatch = markdown.match(/## 🧪 3\. Suite de Tests Unitaires[\s\S]*?(?=## ⚡ 4\. Audit de Performance|$)/i);
+            const auditMatch = markdown.match(/## ⚡ 4\. Audit de Performance[\s\S]*/i);
+
+            if (backlogMatch) sections['tab-backlog'] = backlogMatch[0];
+            if (archMatch) sections['tab-architecture'] = archMatch[0];
+            
+            // Pour le code et les tests, extraire les blocs de code java proprement
+            if (codeMatch) {
+                sections['tab-code'] = extractJavaCode(codeMatch[0]);
+            }
+            if (testsMatch) {
+                sections['tab-tests'] = extractJavaCode(testsMatch[0]);
+            }
+            if (auditMatch) sections['tab-audit'] = auditMatch[0];
+
+            productionReports = sections;
+        }
+
+        // Navigation d'onglets
+        let activeTab = 'tab-backlog';
+        window.switchTab = function(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            const clickedBtn = document.querySelector(`.tab-btn[onclick="switchTab('${tabId}')"]`);
+            if (clickedBtn) clickedBtn.classList.add('active');
+            
+            activeTab = tabId;
+            displayActiveTab();
+        };
+
+        function displayActiveTab() {
+            const content = productionReports[activeTab];
+            if (!content) {
+                resultsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-solid fa-hourglass-empty"></i>
+                        <p>Aucune donnée disponible pour cet onglet.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            if (activeTab === 'tab-code' || activeTab === 'tab-tests') {
+                // Rendu brut de code avec coloration syntaxique
+                resultsContainer.innerHTML = `
+                    <div class="markdown-body">
+                        <pre><code class="language-java">${escapeHTML(content)}</code></pre>
+                    </div>
+                `;
+            } else {
+                // Rendu Markdown via Marked JS
+                resultsContainer.innerHTML = `
+                    <div class="markdown-body">
+                        ${marked.parse(content)}
+                    </div>
+                `;
+            }
+
+            // Ré-appliquer la coloration syntaxique
+            resultsContainer.querySelectorAll('pre code').forEach((el) => {
+                hljs.highlightElement(el);
+            });
+        }
+
+        // Initialisation
+        connectSSE();
+    </script>
+</body>
+</html>

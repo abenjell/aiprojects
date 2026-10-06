@@ -113,6 +113,19 @@ Pour approfondir vos connaissances ou concevoir de nouveaux compétences (Skills
 
 ---
 
+## Phase 4 : Ingénierie d'Équipe Autonome (Software Factory) – Post-Formation
+*Objectif : Concevoir, faire collaborer et surveiller une équipe d'agents d'élite (Architecte, Dev, QA, Perf).*
+
+### Programme de la Phase 4 :
+* **Étape 1 : Conception de l'Agent Architecte (Routeur Java)**
+  * Implémenter un coordinateur dans `mcp-client` chargé de diviser une tâche en contrats d'interfaces et de router les requêtes aux bons sous-agents.
+* **Étape 2 : Création des Prompts & Rôles Spécifiques**
+  * Configurer 4 profils distincts (`Architecte`, `Dev`, `QA`, `Performance`) avec des consignes système imperméables.
+* **Étape 3 : Mise en place de l'Observabilité & Tracing**
+  * Instrumenter les agents avec Micrometer/Grafana et configurer un tableau d'événements SSE pour streamer l'activité de l'équipe d'agents en direct.
+
+---
+
 ## 📚 Ressources incontournables
 * **Protocoles & SDK :** [Introduction to MCP (Anthropic)](https://modelcontextprotocol.io/introduction) et les dépôts GitHub associés (`@modelcontextprotocol/sdk`).
 * **Exemples Pratiques :** Les serveurs officiels et communautaires [mcp-servers sur GitHub](https://github.com/modelcontextprotocol/servers).

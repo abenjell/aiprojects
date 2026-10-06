@@ -1,33 +1,185 @@
 [ {
   "id" : "TASK-1",
-  "title" : "Passer commande et payer par carte bancaire",
-  "description" : "**En tant que** client acheteur\n**Je veux** saisir mes coordonnées de carte bancaire de manière sécurisée pour valider mon achat\n**Afin de** finaliser ma commande et acquérir les produits.",
+  "title" : "S'authentifier à l'application de gestion de ferme",
+  "description" : "**En tant qu'** exploitant de ferme avicole (admin)\n**Je veux** me connecter à l'application via un identifiant et un mot de passe sécurisé\n**Afin de** accéder aux données de production et de gestion client de manière protégée.\n\n**Règles de gestion :**\n- Authentification par email + mot de passe\n- Stockage sécurisé du mot de passe (hash bcrypt)\n- Session persistante (JWT ou session sécurisée)\n- Redirection vers le dashboard après connexion réussie",
+  "priority" : "CRITICAL",
+  "status" : "TODO",
+  "storyPoints" : 5,
+  "acceptanceCriteria" : [ "**Étant donné** que je suis sur la page de connexion, **Quand** je saisis un email et un mot de passe valides, **Alors** je suis authentifié et redirigé vers le tableau de bord.</item>\n<item>**Étant donné** que je saisis un identifiant ou mot de passe incorrect, **Quand** je clique sur \"Se connecter\", **Alors** un message d'erreur générique s'affiche sans révéler si l'email existe ou non.</item>\n<item>**Étant donné** que je suis connecté, **Quand** je quitte l'application et y reviens, **Alors** ma session est toujours active (token valide).</item>" ]
+}, {
+  "id" : "TASK-2",
+  "title" : "Gérer les bâtiments de ponte (CRUD)",
+  "description" : "**En tant qu'** exploitant de ferme avicole\n**Je veux** créer, consulter, modifier et supprimer des bâtiments de ponte\n**Afin de** maintenir un référentiel à jour des bâtiments où sont élevés mes poules pondeuses.\n\n**Règles de gestion :**\n- Champs : nom du bâtiment, identifiant unique, capacité (nombre de poules), adresse/emplacement, date de mise en service\n- Un bâtiment peut être actif ou inactif (statut)\n- La suppression d'un bâtiment ne doit être possible que s'il n'a aucun historique de production",
+  "priority" : "HIGH",
+  "status" : "TODO",
+  "storyPoints" : 5,
+  "acceptanceCriteria" : [ "**Étant donné** que je suis authentifié et accède au module \"Bâtiments\", **Quand** je remplis le formulaire d'ajout avec un nom, une capacité et un emplacement, **Alors** le bâtiment est créé et apparaît dans la liste.</item>\n<item>**Étant donné** que je consulte un bâtiment existant, **Quand** je modifie ses informations et valide, **Alors** les modifications sont enregistrées et visibles immédiatement.</item>\n<item>**Étant donné** qu'un bâtiment possède un historique de production, **Quand** je tente de le supprimer, **Alors** un message d'erreur m'informe que la suppression est impossible et propose une désactivation.</item>" ]
+}, {
+  "id" : "TASK-3",
+  "title" : "Saisir la production journalière d'œufs par bâtiment",
+  "description" : "**En tant qu'** exploitant de ferme avicole\n**Je veux** enregistrer chaque jour le nombre d'œufs pondus pour chaque bâtiment\n**Afin de** suivre la production quotidienne et disposer de données fiables pour les statistiques et la facturation.\n\n**Règles de gestion :**\n- Saisie rapide avec affichage en grille (bâtiments en colonnes, dates en lignes)\n- Saisie en nombre entier d'œufs\n- Possibilité de saisir les œufs cassés/abîmés séparément\n- Une seule saisie par bâtiment et par jour (modification possible)\n- Validation : la saisie ne peut pas concerner une date future",
   "priority" : "CRITICAL",
   "status" : "TODO",
   "storyPoints" : 8,
-  "acceptanceCriteria" : [ "Given que je suis sur le formulaire de paiement, When je saisis des coordonnées bancaires valides et clique sur \"Payer\", Then ma transaction est validée et je suis redirigé vers une page de succès.", "Given que je tente de payer, When la carte est refusée ou que la saisie est incorrecte, Then un message d'erreur explicite s'affiche et mon panier reste inchangé." ]
+  "acceptanceCriteria" : [ "**Étant donné** que je suis authentifié et accède à la page de saisie journalière, **Quand** je sélectionne une date et saisis un nombre d'œufs pour un bâtiment, **Alors** la saisie est enregistrée et un message de confirmation apparaît.</item>\n<item>**Étant donné** qu'une saisie existe déjà pour un bâtiment à une date donnée, **Quand** je saisis une nouvelle valeur, **Alors** la valeur précédente est écrasée et un avertissement me prévient qu'une modification a eu lieu (avec horodatage).</item>\n<item>**Étant donné** que je tente de saisir une date future, **Quand** je valide, **Alors** un message d'erreur m'empêche d'enregistrer cette saisie.</item>" ]
 }, {
-  "id" : "TASK-2",
-  "title" : "Ajouter un article au panier d'achat",
-  "description" : "**En tant que** visiteur du site\n**Je veux** pouvoir cliquer sur un bouton \"Ajouter au panier\" depuis la fiche produit\n**Afin d'**accumuler des articles que je souhaite acheter lors de ma session.",
+  "id" : "TASK-4",
+  "title" : "Gérer les clients (CRUD)",
+  "description" : "**En tant qu'** exploitant de ferme avicole\n**Je veux** créer, consulter, modifier et supprimer des fiches clients\n**Afin de** disposer d'un carnet de clients à jour pour émettre des bons de commande et des factures.\n\n**Règles de gestion :**\n- Champs : nom/raison sociale, type (particulier/professionnel), adresse, code postal, ville, pays, téléphone, email, SIRET (si pro), numéro TVA intracommunautaire\n- Recherche par nom, email ou ville\n- Possibilité de marquer un client comme inactif sans le supprimer (historique conservé)\n- Validation email et téléphone",
+  "priority" : "HIGH",
+  "status" : "TODO",
+  "storyPoints" : 5,
+  "acceptanceCriteria" : [ "**Étant donné** que je suis authentifié et accède au module \"Clients\", **Quand** je remplis le formulaire de création avec des informations valides, **Alors** le client est créé et apparaît dans la liste.</item>\n<item>**Étant donné** que je recherche un client par son nom ou sa ville, **Quand** je saisis un mot-clé, **Alors** la liste se filtre en temps réel avec les résultats correspondants.</item>\n<item>**Étant donné** qu'un client a déjà des commandes ou factures, **Quand** je tente de le supprimer, **Alors** un message m'informe que la suppression est impossible et propose une désactivation (statut inactif).</item>" ]
+}, {
+  "id" : "TASK-5",
+  "title" : "Éditer un bon de commande pour un client",
+  "description" : "**En tant qu'** exploitant de ferme avicole\n**Je veux** créer un bon de commande (devis/commande) pour un client en sélectionnant des produits (œufs) et des quantités\n**Afin de** formaliser les demandes clients avant facturation.\n\n**Règles de gestion :**\n- Sélection du client (depuis la liste)\n- Lignes de commande : produit (ex: œuf calibre M, calibre G), quantité, prix unitaire\n- Calcul automatique des sous-totaux et du total\n- Date de validité du bon de commande\n- Statuts : Brouillon, Envoyé, Accepté, Refusé, Facturé\n- Conversion possible d'un bon de commande accepté en facture\n- Numérotation automatique des bons de commande (ex: BC-2024-0001)",
+  "priority" : "HIGH",
+  "status" : "TODO",
+  "storyPoints" : 8,
+  "acceptanceCriteria" : [ "**Étant donné** que je suis authentifié et crée un nouveau bon de commande, **Quand** je sélectionne un client et ajoute au moins une ligne (produit + quantité + prix), **Alors** le total est calculé automatiquement et le bon est sauvegardé en brouillon.</item>\n<item>**Étant donné** qu'un bon de commande est en statut \"Envoyé\", **Quand** je modifie son statut en \"Accepté\", **Alors** il devient prêt à être converti en facture et son numéro est verrouillé.</item>\n<item>**Étant donné** qu'un bon de commande existe, **Quand** je le convertis en facture, **Alors** une nouvelle facture est créée reprenant toutes les lignes du bon et un lien entre les deux documents est conservé.</item>" ]
+}, {
+  "id" : "TASK-6",
+  "title" : "Générer une facture au format PDF pour un client",
+  "description" : "**En tant qu'** exploitant de ferme avicole\n**Je veux** générer une facture PDF professionnelle à partir d'un bon de commande ou créer une facture directement\n**Afin de** l'envoyer au client et conserver une trace comptable des ventes.\n\n**Règles de gestion :**\n- Numérotation séquentielle et unique des factures (ex: FACT-2024-0001)\n- Mentions légales obligatoires : numéro SIRET vendeur, numéro TVA, adresse, mentions de TVA selon régime\n- Lignes : description, quantité, prix unitaire HT, total HT, TVA, total TTC\n- Conditions de paiement, délai de paiement, coordonnées bancaires (RIB/IBAN)\n- Téléchargement direct au format PDF\n- Stockage des PDF générés pour historique et re-téléchargement",
+  "priority" : "HIGH",
+  "status" : "TODO",
+  "storyPoints" : 8,
+  "acceptanceCriteria" : [ "**Étant donné** que j'ai un bon de commande accepté, **Quand** je clique sur \"Générer la facture\", **Alors** un fichier PDF est généré avec toutes les mentions légales et téléchargé automatiquement.</item>\n<item>**Étant donné** que je crée directement une facture, **Quand** je renseigne les lignes, le client et les informations de paiement, **Alors** un PDF est généré avec un numéro unique et conservé dans l'historique.</item>\n<item>**Étant donné** qu'une facture a été générée, **Quand** je consulte l'historique des factures, **Alors** je peux la re-télécharger au format PDF à tout moment.</item>" ]
+}, {
+  "id" : "TASK-7",
+  "title" : "Afficher le dashboard - Évolution de la production totale d'œufs",
+  "description" : "**En tant qu'** exploitant de ferme avicole\n**Je veux** visualiser sur le tableau de bord un graphique montrant l'évolution de la production totale d'œufs sur une période donnée\n**Afin de** mesurer la performance globale de mon élevage.\n\n**Règles de gestion :**\n- Graphique en courbe (ligne) avec les données journalières/hebdomadaires/mensuelles\n- Sélecteur de période : 7 jours, 30 jours, 90 jours, 1 an, personnalisé\n- Affichage des KPI : total de la période, moyenne journalière, meilleure journée, pire journée\n- Possibilité d'exporter les données (CSV/Excel)\n- Mise à jour automatique à chaque nouvelle saisie",
+  "priority" : "HIGH",
+  "status" : "TODO",
+  "storyPoints" : 5,
+  "acceptanceCriteria" : [ "**Étant donné** que je suis authentifié et accède au tableau de bord, **Quand** la page se charge, **Alors** un graphique affiche la production totale des 30 derniers jours avec les KPI associés.</item>\n<item>**Étant donné** que je consulte le graphique, **Quand** je change la période (ex: passer de 30 à 90 jours), **Alors** le graphique et les KPI sont mis à jour dynamiquement.</item>\n<item>**Étant donné** que je clique sur le bouton d'export, **Quand** je valide, **Alors** un fichier CSV/Excel contenant les données détaillées de la période est téléchargé.</item>" ]
+}, {
+  "id" : "TASK-8",
+  "title" : "Afficher le dashboard - Évolution de la production par bâtiment",
+  "description" : "**En tant qu'** exploitant de ferme avicole\n**Je veux** visualiser sur le tableau de bord un graphique montrant l'évolution de la production d'œufs par bâtiment\n**Afin de** comparer la performance de chaque bâtiment et identifier d'éventuels problèmes.\n\n**Règles de gestion :**\n- Graphique multi-courbes (une courbe par bâtiment) ou barres groupées\n- Légende interactive permettant d'afficher/masquer un bâtiment\n- Sélecteur de période identique au dashboard global\n- Affichage d'un classement (top/moins bons bâtiments)\n- Possibilité de filtrer par bâtiment spécifique\n- Comparaison avec la capacité théorique (taux de ponte par rapport au cheptel)",
+  "priority" : "HIGH",
+  "status" : "TODO",
+  "storyPoints" : 5,
+  "acceptanceCriteria" : [ "**Étant donné** que je suis authentifié et accède au tableau de bord, **Quand** je consulte la section \"Production par bâtiment\", **Alors** un graphique multi-courbes affiche la production de chaque bâtiment sur la période sélectionnée.</item>\n<item>**Étant donné** que je consulte le graphique, **Quand** je clique sur un bâtiment dans la légende, **Alors** la courbe correspondante apparaît ou disparaît.</item>\n<item>**Étant donné** que je consulte la section, **Quand** je sélectionne un bâtiment spécifique dans le filtre, **Alors** seuls les KPIs et la courbe de ce bâtiment s'affichent.</item>" ]
+}, {
+  "id" : "TASK-9",
+  "title" : "Gérer le catalogue de produits (calibres d'œufs et prix)",
+  "description" : "**En tant qu'** exploitant de ferme avicole\n**Je veux** gérer un catalogue de produits (types d'œufs, calibres, prix de vente)\n**Afin de** disposer d'une liste de produits à jour pour la création des bons de commande et des factures.\n\n**Règles de gestion :**\n- Champs : nom du produit, référence, calibre (S/M/L/XL), catégorie (œuf frais, œuf bio, etc.), prix unitaire HT, taux de TVA applicable, unité (plateau de 30, par douzaine, à l'unité), stock disponible (optionnel)\n- Possibilité d'activer/désactiver un produit\n- Historique des prix pour traçabilité\n- Prix différencié possible selon le type de client (particulier / professionnel)",
+  "priority" : "HIGH",
+  "status" : "TODO",
+  "storyPoints" : 5,
+  "acceptanceCriteria" : [ "**Étant donné** que je suis authentifié et accède au module \"Produits\", **Quand** je crée un nouveau produit avec ses caractéristiques et son prix, **Alors** le produit apparaît dans le catalogue et est sélectionnable lors d'une commande.</item>\n<item>**Étant donné** qu'un produit est utilisé dans des commandes/factures existantes, **Quand** je modifie son prix, **Alors** l'ancien prix est conservé dans l'historique et les documents déjà émis ne sont pas impactés.</item>\n<item>**Étant donné** que je consulte le catalogue, **Quand** je désactive un produit, **Alors** il n'apparaît plus dans les formulaires de création mais reste consultable dans l'historique des anciens documents.</item>" ]
+}, {
+  "id" : "TASK-10",
+  "title" : "Afficher le dashboard - Évolution des ventes et chiffre d'affaires",
+  "description" : "**En tant qu'** exploitant de ferme avicole\n**Je veux** visualiser sur le tableau de bord un graphique montrant l'évolution des ventes (chiffre d'affaires) et du nombre d'œufs vendus\n**Afin de** suivre la performance commerciale de mon activité et adapter ma production.\n\n**Règles de gestion :**\n- Graphique combiné : barres (CA en €) + courbe (nombre d'œufs vendus)\n- Distinction CA facturé / CA encaissé\n- Filtre par période (7j, 30j, 90j, 1an, personnalisé)\n- Filtre par client ou type de client (particulier/pro)\n- KPI : CA total période, nombre total d'œufs vendus, panier moyen, meilleur client\n- Comparaison N vs N-1 si historique suffisant\n- Export CSV/Excel des données",
+  "priority" : "HIGH",
+  "status" : "TODO",
+  "storyPoints" : 5,
+  "acceptanceCriteria" : [ "**Étant donné** que je suis authentifié et accède au tableau de bord, **Quand** je consulte la section \"Ventes\", **Alors** un graphique affiche l'évolution du chiffre d'affaires et du nombre d'œufs vendus sur la période sélectionnée avec les KPI associés.</item>\n<item>**Étant donné** que je consulte la section, **Quand** je filtre par client ou type de client, **Alors** le graphique et les KPI se mettent à jour dynamiquement.</item>\n<item>**Étant donné** que je clique sur le bouton d'export, **Quand** je valide, **Alors** un fichier CSV/Excel des ventes de la période est téléchargé.</item>" ]
+}, {
+  "id" : "TASK-11",
+  "title" : "Saisir le nombre quotidien d'œufs par bâtiment",
+  "description" : "En tant que fermier,\nJe veux saisir chaque jour le nombre d'œufs produits par bâtiment,\nAfin de suivre la production et de disposer de données précises pour la gestion.",
   "priority" : "HIGH",
   "status" : "TODO",
   "storyPoints" : 2,
-  "acceptanceCriteria" : [ "Given que je suis sur la fiche d'un produit avec du stock, When je clique sur \"Ajouter au panier\", Then le compteur d'articles dans mon en-tête de panier augmente de 1.", "Given que je clique sur \"Ajouter au panier\", When le produit est en rupture de stock, Then le bouton est désactivé et un message d'erreur s'affiche." ]
+  "acceptanceCriteria" : [ "Étant donné que je me trouve dans l'interface de saisie quotidienne, lorsque je sélectionne un bâtiment et entre le nombre d'œufs, alors l'enregistrement est sauvegardé et affiché dans l'historique.", "Étant donné un enregistrement existant, lorsque je corrige une valeur, alors la mise à jour est persistante et l'historique reflète la nouvelle valeur." ]
 }, {
-  "id" : "TASK-3",
-  "title" : "Visualiser mon panier d'achat et le montant total",
-  "description" : "**En tant que** client\n**Je veux** consulter la liste des articles de mon panier avec le calcul automatique du total\n**Afin de** vérifier mes choix et connaître le montant exact avant de payer.",
-  "priority" : "HIGH",
+  "id" : "TASK-12",
+  "title" : "Configurer les paramètres de la ferme (informations légales)",
+  "description" : "**En tant qu'** exploitant de ferme avicole (admin)\n**Je veux** configurer les informations légales de ma ferme (raison sociale, SIRET, TVA, adresse, RIB, logo, mentions sur factures)\n**Afin de** disposer d'une base utilisée automatiquement dans la génération des factures PDF et les paramètres globaux de l'application.\n\n**Règles de gestion :**\n- Champs : raison sociale, SIRET, TVA intracommunautaire, adresse complète, téléphone, email, RIB/IBAN, logo\n- Régime de TVA (normal, simplifié, franchise)\n- Mentions de pied de facture personnalisables (pénalités de retard, conditions de paiement)\n- Une seule configuration active (mono-ferme)\n- Modifiable à tout moment par l'administrateur",
+  "priority" : "CRITICAL",
   "status" : "TODO",
   "storyPoints" : 3,
-  "acceptanceCriteria" : [ "Given que j'ai 2 articles dans mon panier à 10€ et 15€, When je consulte la page panier, Then le total affiché est calculé à 25€.", "Given que je suis sur la page panier, When je supprime un article ou modifie sa quantité, Then la liste se met à jour et le montant total est recalculé instantanément." ]
+  "acceptanceCriteria" : [ "Étant donné que je suis authentifié en tant qu'admin, quand j'accède aux paramètres de la ferme et renseigne toutes les informations légales, alors la configuration est sauvegardée et utilisée comme base pour les futures factures.</item>\n<item>Étant donné que je modifie les coordonnées de la ferme, quand je consulte une facture ancienne, alors les anciennes factures ne sont pas modifiées (snapshot conservé avec les anciennes coordonnées).</item>\n<item>Étant donné qu'un logo est uploadé, quand je génère une facture PDF, alors le logo apparaît en en-tête du document.</item>" ]
 }, {
-  "id" : "TASK-4",
-  "title" : "Recevoir un e-mail de confirmation après achat",
-  "description" : "**En tant que** client ayant payé sa commande\n**Je veux** recevoir automatiquement un e-mail de confirmation récapitulatif\n**Afin d'**avoir une preuve écrite de mon achat et le détail de ma transaction.",
-  "priority" : "HIGH",
+  "id" : "TASK-13",
+  "title" : "Gérer le suivi des paiements des factures (encaissements)",
+  "description" : "**En tant qu'** exploitant de ferme avicole\n**Je veux** suivre le statut de paiement des factures (impayée, partiellement payée, payée) et enregistrer les encaissements\n**Afin de** connaître précisément la trésorerie de mon exploitation et relancer les clients en retard.\n\n**Règles de gestion :**\n- Statuts facture : Impayée, Partiellement payée, Payée, En retard\n- Enregistrement d'un encaissement : date, montant, mode de paiement (virement, chèque, espèces, CB)\n- Calcul automatique du reste à payer\n- Historique des encaissements par facture\n- Détection automatique des factures en retard selon le délai de paiement configuré\n- Liste des factures impayées avec filtre par client",
+  "priority" : "MEDIUM",
+  "status" : "TODO",
+  "storyPoints" : 5,
+  "acceptanceCriteria" : [ "Étant donné qu'une facture est émise, quand je consulte sa fiche, alors le statut initial est \"Impayée\" et le montant restant dû est égal au total TTC.</item>\n<item>Étant donné qu'une facture est entièrement payée, quand je consulte sa fiche, alors le statut est \"Payée\" et l'historique des encaissements est visible.</item>\n<item>Étant donné qu'une facture dépasse le délai de paiement configuré, quand je consulte le tableau des factures, alors elle apparaît automatiquement en rouge avec le statut \"En retard\".</item>" ]
+}, {
+  "id" : "TASK-14",
+  "title" : "Consulter l'historique et la fiche d'un client (commandes, factures, statistiques)",
+  "description" : "**En tant qu'** exploitant de ferme avicole\n**Je veux** consulter la fiche détaillée d'un client avec l'historique de ses bons de commande, factures, montants facturés et payés\n**Afin de** disposer d'une vision 360° de chaque client et suivre ma relation commerciale.\n\n**Règles de gestion :**\n- Fiche client avec : informations de contact, liste des bons de commande, liste des factures\n- Statistiques par client : CA total, nombre d'œufs achetés, dernière commande, panier moyen\n- Indicateur visuel pour les clients en retard de paiement\n- Possibilité d'ajouter des notes/commentaires internes par client\n- Export PDF de la fiche client",
+  "priority" : "MEDIUM",
   "status" : "TODO",
   "storyPoints" : 3,
-  "acceptanceCriteria" : [ "Given qu'un paiement a été validé avec succès, When le système finalise la transaction, Then un e-mail contenant le récapitulatif (numéro de commande, articles, montant) est envoyé à l'adresse du client.", "Given que l'envoi d'e-mail échoue techniquement, When la commande est validée, Then l'erreur est journalisée et une tentative de renvoi asynchrone est planifiée sans bloquer l'expérience utilisateur." ]
+  "acceptanceCriteria" : [ "Étant donné que je consulte un client existant, quand j'accède à sa fiche, alors je vois ses informations complètes ainsi que la liste de tous ses bons de commande et factures.</item>\n<item>Étant donné qu'un client a des factures impayées, quand je consulte sa fiche, alors un badge \"En retard\" s'affiche en évidence avec le montant dû.</item>\n<item>Étant donné que j'ajoute une note interne sur un client, quand un autre utilisateur accède à la fiche, alors il peut consulter cette note.</item>" ]
+}, {
+  "id" : "TASK-15",
+  "title" : "Dashboard - Corrélation production vs ventes (analyse de marge)",
+  "description" : "**En tant qu'** exploitant de ferme avicole\n**Je veux** visualiser sur le tableau de bord un graphique superposant l'évolution de la production d'œufs et des ventes sur la même période\n**Afin de** mesurer la corrélation entre ce que je produis et ce que je vends, détecter les surplus/déficits et optimiser ma rentabilité.\n\n**Règles de gestion :**\n- Graphique combiné : production (œufs) en barres + ventes (œufs vendus) en courbe\n- Affichage du ratio production/vente en pourcentage\n- Mise en évidence des périodes de surproduction ou sous-production\n- Sélecteur de période identique aux autres graphiques du dashboard\n- Calcul et affichage du taux de perte estimé (œufs cassés + invendus)",
+  "priority" : "MEDIUM",
+  "status" : "TODO",
+  "storyPoints" : 5,
+  "acceptanceCriteria" : [ "Étant donné que je consulte le dashboard, quand j'accède à la section \"Production vs Ventes\", alors un graphique affiche simultanément la production et les ventes sur la période sélectionnée.</item>\n<item>Étant donné que les ventes dépassent la production sur une période, quand je consulte le ratio, alors un indicateur visuel de déficit est affiché (rupture de stock probable).</item>\n<item>Étant donné que je consulte la section, quand je change la période, alors le graphique et le ratio production/vente sont recalculés dynamiquement.</item>" ]
+}, {
+  "id" : "TASK-16",
+  "title" : "Créer les comptes utilisateurs de la ferme (multi-utilisateurs avec rôles)",
+  "description" : "**En tant qu'** administrateur de la ferme\n**Je veux** créer et gérer plusieurs comptes utilisateurs (employés) avec des rôles différents\n**Afin de** déléguer la saisie de la production ou la gestion des clients à des employés tout en contrôlant leurs accès.\n\n**Règles de gestion :**\n- Rôles : Administrateur (tous les droits), Opérateur (saisie production uniquement), Commercial (gestion clients/commandes/factures)\n- Champs utilisateur : nom, prénom, email (utilisé pour login), rôle, statut actif/inactif\n- Création d'un mot de passe initial envoyé par email\n- Désactivation d'un compte sans suppression (traçabilité)\n- L'administrateur peut réinitialiser le mot de passe d'un utilisateur",
+  "priority" : "MEDIUM",
+  "status" : "TODO",
+  "storyPoints" : 5,
+  "acceptanceCriteria" : [ "Étant donné que je suis admin, quand je crée un nouvel utilisateur avec un rôle spécifique, alors le compte est actif et un email contenant le mot de passe initial est envoyé.</item>\n<item>Étant donné qu'un utilisateur a un rôle Opérateur, quand il se connecte, alors il ne voit que le module de saisie et a accès en lecture seule au dashboard.</item>\n<item>Étant donné qu'un utilisateur est désactivé, quand il tente de se connecter, alors l'accès lui est refusé mais son historique est conservé.</item>" ]
+}, {
+  "id" : "TASK-17",
+  "title" : "Consulter la liste des produits",
+  "description" : "En tant que visiteur du site, je veux consulter la liste des produits disponibles afin de pouvoir les parcourir et choisir ceux que je souhaite acheter.",
+  "priority" : "HIGH",
+  "status" : "TODO",
+  "storyPoints" : 5,
+  "acceptanceCriteria" : [ "Étant donné que je suis sur la page d'accueil, quand je clique sur le lien \"Produits\", alors je suis redirigé vers la page de la liste des produits et je vois les articles affichés avec leurs images, noms, prix et disponibilité.", "Étant donné que je suis sur la page de la liste des produits, quand je sélectionne un filtre de catégorie, alors seuls les produits de cette catégorie sont affichés." ]
+}, {
+  "id" : "TASK-18",
+  "title" : "Gérer le catalogue de produits (CRUD)",
+  "description" : "En tant qu'administrateur du site e-commerce, je veux créer, consulter, modifier et supprimer des produits dans le catalogue afin de mettre à jour l'ensemble des articles proposés à la vente.",
+  "priority" : "CRITICAL",
+  "status" : "TODO",
+  "storyPoints" : 8,
+  "acceptanceCriteria" : [ "Étant donné que je suis authentifié en tant qu'administrateur, quand j'accède au module \"Catalogue\", alors je vois la liste de tous les produits avec leurs informations clés (nom, référence, prix, stock).", "Étant donné que je suis dans le module \"Catalogue\", quand je clique sur le bouton \"Ajouter un produit\", alors un formulaire s'affiche pour créer un nouveau produit.", "Étant donné que je remplis le formulaire avec des données valides (nom, description, prix, catégorie, etc.), quand je clique sur \"Enregistrer\", alors le produit est créé et apparaît dans la liste.", "Étant donné que je clique sur un produit existant, alors je peux le modifier et les modifications sont enregistrées." ]
+}, {
+  "id" : "TASK-19",
+  "title" : "Gérer le stock des produits",
+  "description" : "En tant qu'administrateur du site e-commerce, je veux gérer les niveaux de stock de chaque article (ajouter, déduire, visualiser) afin de garantir la disponibilité des produits et éviter les ventes sur rupture de stock.",
+  "priority" : "CRITICAL",
+  "status" : "TODO",
+  "storyPoints" : 8,
+  "acceptanceCriteria" : [ "Étant donné que je suis authentifié en tant qu'administrateur, quand j'accède à la page d'un produit, alors je vois le niveau de stock actuel.", "Étant donné que je suis dans la fiche d'un produit, quand je modifie la quantité en stock et que je clique sur \"Mettre à jour\", alors le stock est mis à jour.", "Étant donné qu'un client passe une commande, quand la commande est validée, alors le stock est automatiquement déduit de la quantité disponible.", "Étant donné que le stock d'un produit atteint zéro, alors le produit est automatiquement marqué comme \"Rupture de stock\" sur la page publique." ]
+}, {
+  "id" : "TASK-20",
+  "title" : "Consulter les détails d'un produit",
+  "description" : "En tant que visiteur du site e-commerce, je veux consulter les détails complets d'un produit (description, images, prix, disponibilité) afin de prendre une décision d'achat éclairée.",
+  "priority" : "HIGH",
+  "status" : "TODO",
+  "storyPoints" : 5,
+  "acceptanceCriteria" : [ "Étant donné que je suis un visiteur du site, quand je navigue sur la page d'accueil ou la section \"Boutique\", alors je vois les produits présentés avec leurs images, noms et prix.", "Étant donné que je clique sur un produit dans la liste, alors je suis redirigé vers la fiche détaillée du produit avec toutes les informations (description, images, prix, stock disponible, options).", "Étant donné que je suis sur la fiche produit, quand je clique sur \"Ajouter au panier\", alors le produit est ajouté au panier et un message de confirmation s'affiche." ]
+}, {
+  "id" : "TASK-21",
+  "title" : "Rechercher et filtrer les produits",
+  "description" : "En tant que visiteur du site e-commerce, je veux rechercher des produits par mot-clé et filtrer les résultats (par catégorie, prix, etc.) afin de trouver rapidement l'article qui m'intéresse.",
+  "priority" : "MEDIUM",
+  "status" : "TODO",
+  "storyPoints" : 3,
+  "acceptanceCriteria" : [ "Étant donné que je suis un visiteur du site, quand je saisis un mot-clé dans la barre de recherche et que je clique sur \"Rechercher\", alors je vois les produits correspondants.", "Étant donné que je suis sur la page de résultats, quand j'utilise les filtres (catégorie, prix, marque), alors la liste des produits est affinée selon mes critères.", "Étant donné que je n'ai trouvé aucun résultat, alors un message \"Aucun produit trouvé\" s'affiche avec des suggestions alternatives." ]
+}, {
+  "id" : "TASK-22",
+  "title" : "Gérer le panier d'achat",
+  "description" : "En tant que client du site e-commerce, je veux ajouter, modifier et supprimer des articles dans mon panier afin de préparer ma commande avant paiement.",
+  "priority" : "HIGH",
+  "status" : "TODO",
+  "storyPoints" : 8,
+  "acceptanceCriteria" : [ "Étant donné que je suis un client connecté ou visiteur, quand j'ajoute un produit au panier, alors le panier est mis à jour et le nombre d'articles s'affiche.", "Étant donné que je suis dans la page panier, quand je modifie la quantité d'un article, alors le total est recalculé automatiquement.", "Étant donné que je supprime un article du panier, alors l'article disparaît du panier et le total est recalculé.", "Étant donné que je clique sur \"Passer la commande\", alors je suis redirigé vers le tunnel de commande si mon panier est valide." ]
+}, {
+  "id" : "TASK-23",
+  "title" : "Passer la commande (checkout)",
+  "description" : "En tant que client, je veux saisir mes informations de livraison et de paiement afin de finaliser mon achat.",
+  "priority" : "CRITICAL",
+  "status" : "TODO",
+  "storyPoints" : 8,
+  "acceptanceCriteria" : [ "Étant donné que je suis un client avec des articles dans le panier, quand je clique sur \"Passer la commande\", alors je suis redirigé vers la page de saisie des informations de livraison.", "Étant donné que je remplis le formulaire d'adresse de livraison et que je valide, alors les informations sont enregistrées et le processus continue vers le paiement.", "Étant donné que je suis sur la page de paiement, quand je choisis un mode de paiement et que je confirme, alors le paiement est traité et la commande est créée.", "Étant donné que le paiement est accepté, alors une confirmation de commande avec numéro de commande est générée et affichée." ]
 } ]

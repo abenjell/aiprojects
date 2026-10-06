@@ -81,6 +81,22 @@ public class BacklogService {
         String id = "TASK-" + taskCounter.incrementAndGet();
         String finalPriority = priority != null ? priority.toUpperCase() : "MEDIUM";
         
+        // Aplatir et assainir la liste pour éviter le double-wrapping (type erasure Jackson + LLM formatting bug)
+        List<String> flatCriteria = new ArrayList<>();
+        if (acceptanceCriteria != null) {
+            for (Object item : acceptanceCriteria) {
+                if (item instanceof Iterable<?> iterable) {
+                    for (Object nestedItem : iterable) {
+                        if (nestedItem != null) {
+                            flatCriteria.add(nestedItem.toString());
+                        }
+                    }
+                } else if (item != null) {
+                    flatCriteria.add(item.toString());
+                }
+            }
+        }
+        
         Task newTask = new Task(
                 id,
                 title,
@@ -88,7 +104,7 @@ public class BacklogService {
                 finalPriority,
                 "TODO",
                 storyPoints,
-                acceptanceCriteria != null ? acceptanceCriteria : List.of()
+                flatCriteria
         );
         
         tasks.add(newTask);
